@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -21,38 +21,61 @@ import FormHelperText from '@mui/material/FormHelperText'
 // ** Icons Imports
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
+import { Checkbox, FormControlLabel, FormGroup, FormLabel, MenuItem, Radio, RadioGroup, Select } from '@mui/material'
 
-const FormLayoutsBasic = () => {
+const FormLayoutsBasic = props => {
+  const { xuLyTaoBot } = props
+
   // ** States
   const [values, setValues] = useState({
     password: '',
     showPassword: false
   })
+  const [chooseGame, setChooseGame] = useState({})
 
-  const [confirmPassValues, setConfirmPassValues] = useState({
-    password: '',
-    showPassword: false
-  })
+  useEffect(() => {
+    setValues({ ...values, game: chooseGame })
+  }, [chooseGame])
 
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value })
   }
 
-  const handleConfirmPassChange = prop => event => {
-    setConfirmPassValues({ ...confirmPassValues, [prop]: event.target.value })
-  }
-
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
-  }
-
-  const handleClickConfirmPassShow = () => {
-    setConfirmPassValues({ ...confirmPassValues, showPassword: !confirmPassValues.showPassword })
-  }
-
-  const handleMouseDownPassword = event => {
-    event.preventDefault()
-  }
+  const checkbox = [
+    {
+      label: 'Xổ số Miền bắc 75s',
+      value: 'mb75s',
+      valueCL: 'CLmb75s',
+      valueTX: 'TXmb75s',
+      labelCL: 'Chọn Chẳn Lẻ',
+      labelTX: 'Chọn Tài Xỉu',
+      active: true
+    },
+    {
+      label: ' Xổ số miền trung 75s',
+      value: 'mt75s',
+      valueCL: 'CLmt75s',
+      valueTX: 'TXmt75s',
+      labelCL: 'Chọn Chẳn Lẻ',
+      labelTX: 'Chọn Tài Xỉu'
+    },
+    {
+      label: 'TKXSST1Phut',
+      value: 'tkxsst1p',
+      valueCL: 'CLtkxsst1p',
+      valueTX: 'TXtkxsst1p',
+      labelCL: 'Chọn Chẳn Lẻ',
+      labelTX: 'Chọn Tài Xỉu'
+    },
+    {
+      label: 'Xổ số Miền bắc TK 75s',
+      value: 'mbtk75s',
+      valueCL: 'CLmbtk75s',
+      valueTX: 'TXmbtk75s',
+      labelCL: 'Chọn Chẳn Lẻ',
+      labelTX: 'Chọn Tài Xỉu'
+    }
+  ]
 
   return (
     <Card>
@@ -61,73 +84,86 @@ const FormLayoutsBasic = () => {
         <form onSubmit={e => e.preventDefault()}>
           <Grid container spacing={5}>
             <Grid item xs={12}>
-              <TextField fullWidth label='Name' placeholder='Leonard Carter' />
+              <TextField
+                fullWidth
+                label='Tên Bot'
+                placeholder='Leonard Carter'
+                onChange={handleChange('name')}
+                required
+              />
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                type='email'
-                label='Email'
-                placeholder='carterleonard@gmail.com'
-                helperText='You can use letters, numbers & periods'
+                label='Giá trị vào lệnh'
+                placeholder='Giá trị vào lệnh'
+                onChange={handleChange('von')}
+                required
               />
             </Grid>
+
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel htmlFor='form-layouts-basic-password'>Password</InputLabel>
-                <OutlinedInput
-                  label='Password'
-                  value={values.password}
-                  id='form-layouts-basic-password'
-                  onChange={handleChange('password')}
-                  type={values.showPassword ? 'text' : 'password'}
-                  aria-describedby='form-layouts-basic-password-helper'
-                  endAdornment={
-                    <InputAdornment position='end'>
-                      <IconButton
-                        edge='end'
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        aria-label='toggle password visibility'
-                      >
-                        {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-                <FormHelperText id='form-layouts-basic-password-helper'>
-                  Use 8 or more characters with a mix of letters, numbers & symbols
-                </FormHelperText>
+                <InputLabel htmlFor='demo-simple-select-label'>Hình thức tăng giá trị</InputLabel>
+                <Select
+                  labelId='demo-simple-select-label'
+                  id='demo-simple-select'
+                  // value={age}
+                  label='Hình thức tăng giá trị'
+                  onChange={handleChange('tangGiaTri')}
+                  xs={12}
+                  required
+                >
+                  <MenuItem value='gapLose'>Tăng khi thua</MenuItem>
+                  <MenuItem value='gapWin'>Tăng khi thắng</MenuItem>
+                  <MenuItem value='alwayTang'>Luôn luôn tăng</MenuItem>
+                </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel htmlFor='form-layouts-confirm-password'>Confirm Password</InputLabel>
+                <InputLabel htmlFor='form-layouts-lai'>Chốt lãi</InputLabel>
                 <OutlinedInput
-                  label='Confirm Password'
-                  value={confirmPassValues.password}
-                  id='form-layouts-confirm-password'
-                  onChange={handleConfirmPassChange('password')}
-                  aria-describedby='form-layouts-confirm-password-helper'
-                  type={confirmPassValues.showPassword ? 'text' : 'password'}
-                  endAdornment={
-                    <InputAdornment position='end'>
-                      <IconButton
-                        edge='end'
-                        onClick={handleClickConfirmPassShow}
-                        onMouseDown={handleMouseDownPassword}
-                        aria-label='toggle password visibility'
-                      >
-                        {confirmPassValues.showPassword ? <EyeOutline /> : <EyeOffOutline />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
+                  label='Chốt lãi'
+                  onChange={handleChange('chotLai')}
+                  id='form-layouts-lai'
+                  aria-describedby='form-layouts-lai-helper'
+                  type='text'
+                  required
                 />
-                <FormHelperText id='form-layouts-confirm-password-helper'>
-                  Make sure to type the same password as above
-                </FormHelperText>
               </FormControl>
             </Grid>
+
+            <Grid item xs={12}>
+              <TextField fullWidth label='Chốt lỗ' placeholder='4000' onChange={handleChange('chotLo')} />
+            </Grid>
+
+            <Grid item xs={12}>
+              <FormGroup>
+                {checkbox.map((item, index) => {
+                  return (
+                    <FormControlLabel
+                      key={index}
+                      control={
+                        <Checkbox
+                          onChange={e => {
+                            setChooseGame(prevState => {
+                              return {
+                                ...prevState,
+                                [item.value]: e.target.checked
+                              }
+                            })
+                          }}
+                        />
+                      }
+                      label={item.label}
+                    />
+                  )
+                })}
+              </FormGroup>
+            </Grid>
+
             <Grid item xs={12}>
               <Box
                 sx={{
@@ -138,15 +174,9 @@ const FormLayoutsBasic = () => {
                   justifyContent: 'space-between'
                 }}
               >
-                <Button type='submit' variant='contained' size='large'>
+                <Button type='submit' variant='contained' size='large' onClick={() => xuLyTaoBot(values)}>
                   Get Started!
                 </Button>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Typography sx={{ mr: 2 }}>Already have an account?</Typography>
-                  <Link href='/' onClick={e => e.preventDefault()}>
-                    Log in
-                  </Link>
-                </Box>
               </Box>
             </Grid>
           </Grid>

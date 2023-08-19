@@ -1,6 +1,6 @@
 // ** Next Imports
 import Head from 'next/head'
-import { Router } from 'next/router'
+import Router from 'next/router'
 import { Provider, useStore } from 'react-redux'
 import { useDispatch } from 'react-redux'
 
@@ -16,7 +16,7 @@ import themeConfig from 'src/configs/themeConfig'
 // ** Component Imports
 import UserLayout from 'src/layouts/UserLayout'
 import ThemeComponent from 'src/@core/theme/ThemeComponent'
-import { truyCapValidCode, userProfile } from 'src/action'
+import { userProfile, listBot, listDsBet } from 'src/action'
 
 // ** Contexts
 import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsContext'
@@ -57,11 +57,22 @@ const App = props => {
 
   useEffect(() => {
     const token = truyCapCookie('token')
-    token &&
-      store.dispatch(userProfile()).then(() => {
-        setReady(true)
+
+    if (token) {
+      store.dispatch(userProfile()).then(result => {
+        if (!result._id) {
+          Router.push('/pages/login')
+        }
       })
+      store.dispatch(listBot())
+      store.dispatch(listDsBet())
+    } else {
+      Router.push('/pages/login')
+    }
+    setReady(true)
   }, [])
+
+  console.log(ready)
 
   // Variables
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)

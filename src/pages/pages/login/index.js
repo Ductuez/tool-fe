@@ -94,8 +94,6 @@ const LoginPage = props => {
     xuLyLogin(props)(values)
   }
 
-  console.log(userDetail)
-
   useEffect(() => {
     // xuLyDieuHuongKhoiTao(props)()
   }, [])

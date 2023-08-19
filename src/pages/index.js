@@ -2,6 +2,7 @@
 import Grid from '@mui/material/Grid'
 import { connect } from 'react-redux'
 import * as R from 'ramda'
+import { MD5 } from 'crypto-js'
 
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
@@ -50,12 +51,12 @@ import {
   xuLyToken88
 } from 'src/ultil/handler'
 
-import { truyCapLogintk88, userProfile } from 'src/action'
+import { truyCapLogintk88, userProfile, capNhatToken88, listBot } from 'src/action'
 
 const Dashboard = props => {
   const { userDetail } = props
 
-  const tokenBet = R.pathOr('', ['tokenBet', 'tokenBet'])(userDetail)
+  const tokenBet = R.pathOr('', ['duLieu', 'tokenBet'])(userDetail)
 
   useEffect(() => {
     // xuLyDieuHuongKhoiTao(props)()
@@ -82,7 +83,8 @@ const Dashboard = props => {
 
   const xuLyLoginTk88NoiBo = e => {
     e.preventDefault()
-    xuLyLoginTk88(props)(values)
+    const passwordMD5 = MD5(values.password).toString()
+    xuLyLoginTk88(props)({ ...values, password: passwordMD5 })
   }
 
   const xuLyToken88NoiBo = e => {
@@ -100,7 +102,7 @@ const Dashboard = props => {
           <StatisticsCard {...props} />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          {tokenBet && (
+          {!tokenBet && (
             <Card>
               <CardHeader title='Tài khoản tk88' titleTypographyProps={{ variant: 'h6' }} />
               <form onSubmit={e => xuLyLoginTk88NoiBo(e)}>
@@ -163,7 +165,7 @@ const Dashboard = props => {
         </Grid>
 
         <Grid item xs={12} md={6} lg={6}>
-          {tokenBet && (
+          {!tokenBet && (
             <Card>
               <CardHeader title='Tài khoản tk88' titleTypographyProps={{ variant: 'h6' }} />
               <form onSubmit={e => xuLyLoginTk88NoiBo(e)}>
@@ -220,7 +222,9 @@ const mapStateToProps = common => {
 
 const mapDispatchToProps = {
   truyCapLogintk88,
-  userProfile
+  userProfile,
+  capNhatToken88,
+  listBot
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

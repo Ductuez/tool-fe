@@ -12,26 +12,40 @@ import FormLayoutsAlignment from 'src/views/form-layouts/FormLayoutsAlignment'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
+import { xuLyTaoBot } from 'src/ultil/handler'
+import { connect } from 'react-redux'
+import { taoBot, listBot } from 'src/action'
+import { useEffect } from 'react'
 
-const FormLayouts = () => {
+const FormLayouts = props => {
+  const { listBot } = props
+
+  const propertiesFormLayoutsBasic = {
+    xuLyTaoBot: xuLyTaoBot(props)
+  }
+
+  useEffect(() => {
+    listBot()
+  }, [])
+
   return (
     <DatePickerWrapper>
       <Grid container spacing={6}>
-        <Grid item xs={12} md={6}>
-          <FormLayoutsBasic />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormLayoutsIcons />
-        </Grid>
-        <Grid item xs={12}>
-          <FormLayoutsSeparator />
-        </Grid>
-        <Grid item xs={12}>
-          <FormLayoutsAlignment />
+        <Grid item xs={12} md={12}>
+          <FormLayoutsBasic {...propertiesFormLayoutsBasic} />
         </Grid>
       </Grid>
     </DatePickerWrapper>
   )
 }
 
-export default FormLayouts
+const mapStateToProps = common => {
+  return common
+}
+
+const mapDispatchToProps = {
+  taoBot,
+  listBot
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FormLayouts)

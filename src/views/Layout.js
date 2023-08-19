@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { useRouter } from 'next/router'
 import { ToastContainer } from 'react-toastify'
 
 import { userProfile } from 'src/action'
 import { ktDangNhap, truyCapCookie } from 'src/ultil/common'
+import { xuLyDieuHuong } from 'src/ultil/handler'
 
 const Layout = props => {
   const { children } = props

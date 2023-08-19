@@ -23,7 +23,7 @@ module.exports = {
     '@next/next/no-img-element': 'off',
     'react/no-unescaped-entities': 'off',
     'import/no-anonymous-default-export': 'off',
-
+    'react-hooks/exhaustive-deps': 'off',
     // add new line above return
     'newline-before-return': 'error',
 

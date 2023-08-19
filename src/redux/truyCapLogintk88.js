@@ -1,56 +1,53 @@
 /* eslint-disable camelcase */
-import axios from "axios";
-import * as R from "ramda";
+import axios from 'axios'
+import * as R from 'ramda'
 
 // import Constants from '../constants'
-import { truyCapCookie } from "../ultil/common";
+import { truyCapCookie } from '../ultil/common'
 
-import {
-  TRUY_CAP_LOGIN_TK88_BAT_DAU,
-  TRUY_CAP_LOGIN_TK88_THANH_CONG,
-  TRUY_CAP_LOGIN_TK88_THAT_BAI,
-} from "./constants";
-import { API_TX } from "../ultil/services";
+import { TRUY_CAP_LOGIN_TK88_BAT_DAU, TRUY_CAP_LOGIN_TK88_THANH_CONG, TRUY_CAP_LOGIN_TK88_THAT_BAI } from './constants'
+import { API_TX } from '../ultil/services'
 
 export const truyCapLogintk88 =
   (duLieuBieuMau = {}) =>
-  (dispatch) => {
+  dispatch => {
     dispatch({
-      type: TRUY_CAP_LOGIN_TK88_BAT_DAU,
-    });
+      type: TRUY_CAP_LOGIN_TK88_BAT_DAU
+    })
 
     const promise = new Promise((resolve, reject) => {
-      const doRequest = axios.post("login", duLieuBieuMau, {
+      const doRequest = axios.post('login', duLieuBieuMau, {
         ...API_TX,
         headers: {
-          Authorization: truyCapCookie("token"),
-        },
-      });
+          Authorization: truyCapCookie('token')
+        }
+      })
 
       doRequest
-        .then((ketQua) => {
-          const duLieu = R.pathOr({}, ["data"])(ketQua);
+        .then(ketQua => {
+          const duLieu = R.pathOr({}, ['data'])(ketQua)
 
           dispatch({
             duLieu: duLieu,
-            type: TRUY_CAP_LOGIN_TK88_THANH_CONG,
-          });
+            type: TRUY_CAP_LOGIN_TK88_THANH_CONG
+          })
 
-          resolve(duLieu);
+          resolve(duLieu)
         })
-        .catch((loi) => {
-          reject(loi);
-        });
-    });
+        .catch(loi => {
+          reject(loi)
+        })
+    })
 
-    return promise.catch((loi) => {
+    return promise.catch(loi => {
       dispatch({
         loi,
-        type: TRUY_CAP_LOGIN_TK88_THAT_BAI,
-      });
-      return loi;
-    });
-  };
+        type: TRUY_CAP_LOGIN_TK88_THAT_BAI
+      })
+
+      return loi
+    })
+  }
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -60,18 +57,18 @@ export const reducer = (state, action) => {
         loginTk88: {
           ...state.loginTk88,
           loi: null,
-          dangXuLy: true,
-        },
-      };
+          dangXuLy: true
+        }
+      }
     case TRUY_CAP_LOGIN_TK88_THANH_CONG:
       return {
         ...state,
         loginTk88: {
           duLieu: action.duLieu,
           loi: null,
-          dangXuLy: false,
-        },
-      };
+          dangXuLy: false
+        }
+      }
 
     case TRUY_CAP_LOGIN_TK88_THAT_BAI:
       return {
@@ -79,11 +76,11 @@ export const reducer = (state, action) => {
         loginTk88: {
           ...state.loginTk88,
           loi: action.loi,
-          dangXuLy: false,
-        },
-      };
+          dangXuLy: false
+        }
+      }
 
     default:
-      return state;
+      return state
   }
-};
+}

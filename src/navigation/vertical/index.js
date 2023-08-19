@@ -76,13 +76,13 @@ const navigation = props => {
       path: '/cards'
     },
     {
-      title: 'Tables',
+      title: 'Lịch sử cược',
       icon: Table,
       path: '/tables'
     },
     {
       icon: CubeOutline,
-      title: 'Form Layouts',
+      title: 'Bet',
       path: '/form-layouts'
     }
   ]

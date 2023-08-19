@@ -1,11 +1,14 @@
+import Router from 'next/router'
 import * as R from 'ramda'
 import { toast } from 'react-toastify'
+import { ktDangNhap } from './common'
 
 export const xuLyLogin = props => duLieu => {
   const { dangNhap, userProfile } = props
 
   dangNhap(duLieu).then(result => {
     userProfile()
+    Router.push('/')
   })
 }
 
@@ -15,8 +18,8 @@ export const xuLyValidCode = props => () => {
   truyCapValidCode()
 }
 
-export const xuLyLoginTk88 = self => duLieu => {
-  const { truyCapLogintk88, userProfile } = self.props
+export const xuLyLoginTk88 = props => duLieu => {
+  const { truyCapLogintk88, userProfile } = props
 
   truyCapLogintk88(duLieu).then(() => {
     setTimeout(() => {
@@ -25,17 +28,26 @@ export const xuLyLoginTk88 = self => duLieu => {
   })
 }
 
-export const xuLyTaoBot = self => duLieu => {
-  const { taoBot, listBot } = self.props
+export const xuLyTaoBot = props => duLieu => {
+  const { taoBot, listBot } = props
 
   taoBot({ duLieu: { ...duLieu, status: false } }).then(() => {
     listBot()
   })
 }
 
-export const xuLyStartBot = self => duLieu => {
-  const { startBot, dsBot } = self.props
-  const game = R.pathOr([], ['game'])(duLieu)
+export const xuLyStartBot = props => duLieu => {
+  const { startBot, dsBot } = props
+
+  const game = R.pathOr([], ['game', 0])(duLieu)
+
+  // Convert the object keys to an array and filter out keys with value `true`
+  const stringArray = R.pipe(
+    R.toPairs, // Convert object to array of key-value pairs
+    R.filter(R.last), // Filter pairs where the value is true
+    R.map(R.head) // Extract the first element (the key) from each pair
+  )(game)
+
   const trangThai = R.pathOr(false, ['status'])(duLieu)
 
   const duLieuDsBot = R.pathOr([], ['duLieu'])(dsBot)
@@ -44,9 +56,11 @@ export const xuLyStartBot = self => duLieu => {
     return item.status === true
   })
 
+  console.log(stringArray)
+
   async function callAPIsSequentially() {
-    for (let i = 0; i < game.length; i++) {
-      const type = game[i]
+    for (let i = 0; i < stringArray.length; i++) {
+      const type = stringArray[i]
 
       try {
         await startBot({ duLieu: { ...duLieu, botId: duLieu._id }, type })
@@ -67,7 +81,9 @@ export const xuLyStartBot = self => duLieu => {
     })
   }
 
-  !R.isEmpty(duLieuDsCheck)
+  const check1 = !R.isEmpty(duLieuDsCheck)
+
+  check1
     ? toast('Có 1 Bot đang được chạy', {
         position: 'top-right',
         autoClose: 5000,
@@ -79,7 +95,7 @@ export const xuLyStartBot = self => duLieu => {
         theme: 'light'
       })
     : trangThai
-    ? toast('Bot đang được chạy !!', {
+    ? toast('Bot này đang được chạy !!', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
@@ -98,8 +114,8 @@ export const xuLyChoiThu = self => e => {
   choiThu().then(result => {})
 }
 
-export const xuLyXoaBot = self => duLieu => {
-  const { xoaBot, listBot } = self.props
+export const xuLyXoaBot = props => duLieu => {
+  const { xoaBot, listBot } = props
 
   const idBot = duLieu._id
 
@@ -147,8 +163,7 @@ export const xuLyNgungBot = self => duLieu => {
 
 export const xuLyToken88 = props => duLieu => {
   const { capNhatToken88 } = props
-  capNhatToken88({ tokenBet: duLieu }).then(result => {
-    console.log(result)
+  capNhatToken88({ tokenBet: duLieu.tokenBet }).then(result => {
     if (!result.status) {
       toast(result.message)
     } else {
