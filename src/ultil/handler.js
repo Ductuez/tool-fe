@@ -128,8 +128,8 @@ export const xuLyXoaBot = props => duLieu => {
   })
 }
 
-export const xuLyDangKy = self => duLieu => {
-  const { dangKy, userProfile } = self.props
+export const xuLyDangKy = props => duLieu => {
+  const { dangKy, userProfile } = props
 
   const duLieuBieuMau = {
     ...duLieu

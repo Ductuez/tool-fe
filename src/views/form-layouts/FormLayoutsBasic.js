@@ -74,6 +74,22 @@ const FormLayoutsBasic = props => {
       valueTX: 'TXmbtk75s',
       labelCL: 'Chọn Chẳn Lẻ',
       labelTX: 'Chọn Tài Xỉu'
+    },
+    {
+      label: 'Xổ số Miền bắc TK 45s',
+      value: 'tkxsmn45',
+      valueCL: 'CLmbtk45s',
+      valueTX: 'TXmbtk45s',
+      labelCL: 'Chọn Chẳn Lẻ',
+      labelTX: 'Chọn Tài Xỉu'
+    },
+    {
+      label: 'Xổ số Miền222 bắc TK 45s',
+      value: '173mbtk45s',
+      valueCL: 'CLmbtk45s',
+      valueTX: 'TXmbtk45s',
+      labelCL: 'Chọn Chẳn Lẻ',
+      labelTX: 'Chọn Tài Xỉu'
     }
   ]
 

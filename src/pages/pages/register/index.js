@@ -1,6 +1,6 @@
 // ** React Imports
 import { useState, Fragment } from 'react'
-
+import { connect } from 'react-redux'
 // ** Next Imports
 import Link from 'next/link'
 
@@ -38,6 +38,12 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
 
+import {
+  // xuLyDieuHuongKhoiTao,
+  xuLyDangKy
+} from 'src/ultil/handler'
+import { userProfile, dangKy } from 'src/action'
+
 // ** Styled Components
 const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up('sm')]: { width: '28rem' }
@@ -58,12 +64,14 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   }
 }))
 
-const RegisterPage = () => {
-  // ** States
+const RegisterPage = props => {
   const [values, setValues] = useState({
     password: '',
     showPassword: false
   })
+
+  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
 
   // ** Hook
   const theme = useTheme()
@@ -78,6 +86,15 @@ const RegisterPage = () => {
 
   const handleMouseDownPassword = event => {
     event.preventDefault()
+  }
+
+  const handleSignUp = () => {
+    console.log('sign up')
+    xuLyDangKy(props)({
+      email,
+      username,
+      password: values.password
+    })
   }
 
   return (
@@ -164,8 +181,21 @@ const RegisterPage = () => {
             <Typography variant='body2'>Make your app management easy and fun!</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='username' label='Username' sx={{ marginBottom: 4 }} />
-            <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }} />
+            <TextField
+              autoFocus
+              fullWidth
+              id='username'
+              label='Username'
+              sx={{ marginBottom: 4 }}
+              onChange={e => setUsername(e.target.value)}
+            />
+            <TextField
+              onChange={e => setEmail(e.target.value)}
+              fullWidth
+              type='email'
+              label='Email'
+              sx={{ marginBottom: 4 }}
+            />
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-register-password'>Password</InputLabel>
               <OutlinedInput
@@ -199,7 +229,14 @@ const RegisterPage = () => {
                 </Fragment>
               }
             />
-            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
+            <Button
+              fullWidth
+              size='large'
+              type='submit'
+              variant='contained'
+              sx={{ marginBottom: 7 }}
+              onClick={handleSignUp}
+            >
               Sign up
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -246,4 +283,13 @@ const RegisterPage = () => {
 }
 RegisterPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
 
-export default RegisterPage
+const mapStateToProps = common => {
+  return common
+}
+
+const mapDispatchToProps = {
+  dangKy,
+  userProfile
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage)

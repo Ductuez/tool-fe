@@ -1,60 +1,53 @@
 /* eslint-disable camelcase */
-import axios from "axios";
-import * as R from "ramda";
+import axios from 'axios'
+import * as R from 'ramda'
 
 // import Constants from '../constants'
-import { dangNhap as dangNhapNguoiDung } from "../ultil/common";
+import { dangNhap as dangNhapNguoiDung } from '../ultil/common'
 
-import { API_TX } from "../ultil/services";
+import { API_TX } from '../ultil/services'
 
-import {
-  DANG_KY_BAT_DAU,
-  DANG_KY_THANH_CONG,
-  DANG_KY_THAT_BAI,
-} from "./constants";
+import { DANG_KY_BAT_DAU, DANG_KY_THANH_CONG, DANG_KY_THAT_BAI } from './constants'
 
 export const dangKy =
   (duLieuBieuMau = {}) =>
-  (dispatch) => {
+  dispatch => {
     dispatch({
-      type: DANG_KY_BAT_DAU,
-    });
+      type: DANG_KY_BAT_DAU
+    })
 
     const promise = new Promise((resolve, reject) => {
-      const doRequest = axios.post(
-        "authorsystem/signup",
-        duLieuBieuMau,
-        API_TX
-      );
+      const doRequest = axios.post('authorsystem/signup', duLieuBieuMau, API_TX)
 
       doRequest
-        .then((ketQua) => {
-          const token = R.pathOr({}, ["data", "token"])(ketQua);
+        .then(ketQua => {
+          const token = R.pathOr({}, ['data', 'token'])(ketQua)
 
           if (token) {
-            dangNhapNguoiDung(token);
+            dangNhapNguoiDung(token)
           }
 
           dispatch({
             duLieu: token,
-            type: DANG_KY_THANH_CONG,
-          });
+            type: DANG_KY_THANH_CONG
+          })
 
-          resolve(token);
+          resolve(token)
         })
-        .catch((loi) => {
-          reject(loi);
-        });
-    });
+        .catch(loi => {
+          reject(loi)
+        })
+    })
 
-    return promise.catch((loi) => {
+    return promise.catch(loi => {
       dispatch({
         loi,
-        type: DANG_KY_THAT_BAI,
-      });
-      return loi;
-    });
-  };
+        type: DANG_KY_THAT_BAI
+      })
+
+      return loi
+    })
+  }
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -64,18 +57,18 @@ export const reducer = (state, action) => {
         ketQuaDangKy: {
           ...state.ketQuaDangKy,
           loi: null,
-          dangXuLy: true,
-        },
-      };
+          dangXuLy: true
+        }
+      }
     case DANG_KY_THANH_CONG:
       return {
         ...state,
         ketQuaDangKy: {
           duLieu: action.duLieu,
           loi: null,
-          dangXuLy: false,
-        },
-      };
+          dangXuLy: false
+        }
+      }
 
     case DANG_KY_THAT_BAI:
       return {
@@ -83,11 +76,11 @@ export const reducer = (state, action) => {
         ketQuaDangKy: {
           ...state.ketQuaDangKy,
           loi: action.loi,
-          dangXuLy: false,
-        },
-      };
+          dangXuLy: false
+        }
+      }
 
     default:
-      return state;
+      return state
   }
-};
+}
