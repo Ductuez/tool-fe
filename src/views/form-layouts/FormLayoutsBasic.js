@@ -120,6 +120,10 @@ const FormLayoutsBasic = props => {
             </Grid>
 
             <Grid item xs={12}>
+              <TextField fullWidth label='LaTai' placeholder='LaTai' onChange={handleChange('isTai')} />
+            </Grid>
+
+            <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel htmlFor='demo-simple-select-label'>Hình thức tăng giá trị</InputLabel>
                 <Select
